@@ -1,0 +1,11 @@
+{
+
+  "compilerOptions": {
+    "module": "commonjs",                                /* Specify what module code is generated. */
+    "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
+    "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
+    "resolveJsonModule": true,                        /* Enable importing .json files. */
+    "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "allowJs": true
+  },
+}

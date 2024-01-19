@@ -1,0 +1,15 @@
+{
+  "name": "@facilita-juridico/app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "repository": "https://github.com/nashjunior/teste-facilita-juridico.git",
+  "author": "nashjunior <nashjuniorjj@gmail.com>",
+  "license": "MIT",
+  "workspaces":[
+    "./src/@core"
+  ],
+  "scripts": {
+    "test": "jest"
+  }
+}
