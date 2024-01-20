@@ -6,7 +6,7 @@ import {
 } from '#seedwork/domain/repository';
 import { ClientCoordinate } from '../entities';
 
-export type Filter = string;
+export type Filter = { query: string };
 export class SearchParams extends DefaultParams<Filter> {}
 export class SearchResult extends DefaultResult<ClientCoordinate, Filter> {}
 
