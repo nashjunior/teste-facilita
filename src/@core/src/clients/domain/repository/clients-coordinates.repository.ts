@@ -3,15 +3,15 @@ import { SearchResult as DefaultResult } from '#seedwork/domain/repository/searc
 import {
   ISearchableRepository,
   SearchParams as DefaultParams,
-} from '../../../@seedwork/domain/repository';
-import { User } from '../entities';
+} from '#seedwork/domain/repository';
+import { ClientCoordinate } from '../entities';
 
 export type Filter = string;
 export class SearchParams extends DefaultParams<Filter> {}
-export class SearchResult extends DefaultResult<User, Filter> {}
-// eslint-disable-next-line @typescript-eslint/naming-convention
+export class SearchResult extends DefaultResult<ClientCoordinate, Filter> {}
+
 export type Repository = ISearchableRepository<
-  User,
+  ClientCoordinate,
   Filter,
   SearchParams,
   SearchResult

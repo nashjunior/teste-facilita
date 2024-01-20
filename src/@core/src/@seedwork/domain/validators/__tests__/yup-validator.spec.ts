@@ -9,7 +9,7 @@ class StubYupValidator extends YupValidator<{ field: string }> {
 
 describe('YupValidator fields tests', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
   it('should initialize errors and validatedData with undefined', () => {
     const validator = new StubYupValidator();
@@ -20,8 +20,9 @@ describe('YupValidator fields tests', () => {
   it('should validate with errors', async () => {
     const spyValidate = jest.spyOn(yup.object.prototype, 'validate');
 
-    spyValidate.mockImplementation(function () {
+    spyValidate.mockImplementationOnce(function () {
       throw new yup.ValidationError(
+        //@ts-expect-error type validation error of yup
         {
           name: 'ValidationError',
           message: 'error',
@@ -53,6 +54,7 @@ describe('YupValidator fields tests', () => {
 
     expect(await validator.validate({ field: 'some value' })).toBeTruthy();
     expect(spyValidate).toHaveBeenCalled();
+
     expect(validator.validatedData).toStrictEqual({ field: 'some value' });
     expect(validator.errors).toBeUndefined();
   });

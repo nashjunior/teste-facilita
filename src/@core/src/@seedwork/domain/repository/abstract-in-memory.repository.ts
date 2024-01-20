@@ -46,7 +46,6 @@ export abstract class InMemoryRepository<T extends Entity>
 
   protected async _get(id: string) {
     const index = this.items.findIndex(e => e.uuid === id);
-
     if (index < 0) throw new NotFoundError(`Entity not found using id ${id}`);
 
     return index;

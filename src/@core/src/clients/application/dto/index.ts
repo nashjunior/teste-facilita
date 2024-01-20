@@ -1,2 +1,1 @@
-export * from './users-output.dto';
-
+export * from './clients-output.dto';

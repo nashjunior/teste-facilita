@@ -1,4 +1,4 @@
-export * as CreateUserUsecase from './create-user';
-export * as FindUserUsecase from './find-user';
-export * as DeleteUserUsecase from './delete-user';
-export * as UpdateUserUsecase from './update-user';
+export * as CreateClientUsecase from './create-client';
+export * as FindClientUsecase from './find-client';
+export * as DeleteClientUsecase from './delete-client';
+export * as UpdateClientUsecase from './update-client';
