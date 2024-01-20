@@ -6,10 +6,13 @@
   "repository": "https://github.com/nashjunior/teste-facilita-juridico.git",
   "author": "nashjunior <nashjuniorjj@gmail.com>",
   "license": "MIT",
-  "workspaces":[
+  "workspaces": [
     "./src/@core"
   ],
   "scripts": {
     "test": "jest"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.9"
   }
 }
