@@ -1,9 +1,8 @@
 export type IClientOutput = {
   id: string;
-  nome: string;
-  endereco: string;
+  name: string;
   email: string;
-  telefone: string;
+  phoneNumber: string;
   createdAt: Date;
   updatedAt: Date | null;
   deleted: boolean;
