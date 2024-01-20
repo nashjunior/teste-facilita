@@ -5,9 +5,9 @@ CREATE TABLE clients_coordinates (
     longitude DECIMAL(9,6) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-    deleted BOOLEAN
+    deleted BOOLEAN,
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
-CREATE INDEX idx_client_id ON client_id USING hash (client_id);
+CREATE INDEX idx_client_id ON clients_coordinates USING hash (client_id);
 
