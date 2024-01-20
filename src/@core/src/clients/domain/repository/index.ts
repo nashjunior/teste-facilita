@@ -1,1 +1,2 @@
-export * as UsersRepository from './users.repository';
+export * as ClientsRepository from './clients.repository';
+export * as ClientsCoordinatesRepository from './clients-coordinates.repository';
