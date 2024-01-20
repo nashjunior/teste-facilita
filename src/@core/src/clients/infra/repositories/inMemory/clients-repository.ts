@@ -13,10 +13,10 @@ export class ClientsInMemoryRepository
     if (!filter) {
       return items;
     }
-    const lowerCaseFilter = filter.toLowerCase();
+    const lowerCaseFilter = filter.query.toLowerCase();
     return items.filter(
       i =>
-        i.props.nome.toLowerCase().includes(lowerCaseFilter) ||
+        i.props.name.toLowerCase().includes(lowerCaseFilter) ||
         i.props.email.toLowerCase().includes(lowerCaseFilter),
     );
   }
