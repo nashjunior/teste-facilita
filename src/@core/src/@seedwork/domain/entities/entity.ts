@@ -1,13 +1,13 @@
 import { UniqueEntityId } from '../value-objects/unique-id';
 
 export type IAuditProps =
-  | { createdAt?: Date; updatedAt?: Date; deletedAt?: Date }
+  | { createdAt?: Date; updatedAt?: Date; deleted?: boolean }
   | undefined;
 
 export type IAuditJSONProps = {
   createdAt: Date;
   updatedAt: Date | null;
-  deletedAt: Date | null;
+  deleted: boolean;
 };
 
 export abstract class Entity<Props = Record<string, any>, JsonProps = Props> {
@@ -15,7 +15,7 @@ export abstract class Entity<Props = Record<string, any>, JsonProps = Props> {
 
   private createdAtValue: Date;
   private updateddAtValue: Date | null;
-  private deletedAtValue: Date | null;
+  private deletedValue: boolean;
 
   constructor(
     public readonly props: Props,
@@ -25,7 +25,7 @@ export abstract class Entity<Props = Record<string, any>, JsonProps = Props> {
     this.uniqueEntityID = id ?? new UniqueEntityId();
     this.createdAt = audtiProps?.createdAt ?? new Date();
     this.updatedAt = audtiProps?.updatedAt ?? null;
-    this.deletedAt = audtiProps?.deletedAt ?? null;
+    this.deleted = audtiProps?.deleted ?? false;
   }
 
   get uuid() {
@@ -48,19 +48,19 @@ export abstract class Entity<Props = Record<string, any>, JsonProps = Props> {
     return this.updateddAtValue;
   }
 
-  private set deletedAt(newDate: Date | null) {
-    this.deletedAtValue = newDate;
+  private set deleted(_deleted: boolean) {
+    this.deletedValue = _deleted;
   }
 
-  get deletedAt(): Date | null {
-    return this.deletedAtValue;
+  get deleted(): boolean {
+    return this.deletedValue;
   }
 
   protected get jsonAudit() {
     return {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      deletedAt: this.deletedAt,
+      deleted: this.deleted,
     };
   }
 
