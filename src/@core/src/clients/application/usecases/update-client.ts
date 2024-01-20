@@ -20,8 +20,7 @@ export class Usecase {
 
 export type IInput = {
   uuid: string;
-  nome: string;
-  endereco: string;
+  name: string;
   email: string;
-  telefone: string;
+  phoneNumber: string;
 };

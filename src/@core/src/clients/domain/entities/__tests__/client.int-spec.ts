@@ -5,11 +5,9 @@ import { EntityValidationError } from '#seedwork/domain/errors';
 describe('Integration tests for client entity', () => {
   it('should inherit from entity base class', async () => {
     const clientEntity = await Client.create({
-      nome: 'Nome do Cliente',
-      endereco: 'Endereço do Cliente',
+      name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      telefone: '123456789',
-      deleted: false,
+      phoneNumber: '123456789',
     });
 
     expect(clientEntity).toBeInstanceOf(Entity);
@@ -22,21 +20,13 @@ describe('Integration tests for client entity', () => {
 
     test('should return a valid entity on create', async () => {
       const props: IClientProps = {
-        nome: 'Nome Válido',
-        endereco: 'Endereço Válido',
+        name: 'Nome Válido',
         email: 'email@valido.com',
-        telefone: '987654321',
-        deleted: false,
+        phoneNumber: '987654321',
       };
 
       const client = await Client.create(props);
-      expect(client.toJSON()).toMatchObject({
-        nome: 'Nome Válido',
-        endereco: 'Endereço Válido',
-        email: 'email@valido.com',
-        telefone: '987654321',
-        deleted: false,
-      });
+      expect(client.toJSON()).toMatchObject(props);
     });
   });
 

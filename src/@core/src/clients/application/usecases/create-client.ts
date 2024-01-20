@@ -18,20 +18,4 @@ export class Usecase {
   }
 }
 
-export type Input = {
-  nome: string;
-  endereco: string;
-  email: string;
-  telefone: string;
-};
-
-export type IClientsOutput = {
-  id: string;
-  nome: string;
-  endereco: string;
-  email: string;
-  telefone: string;
-  deleted: boolean;
-  createdAt: Date;
-  updatedAt: Date | null;
-};
+export type Input = { name: string; email: string; phoneNumber: string };

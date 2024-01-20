@@ -16,31 +16,26 @@ describe('Update client usecase unit tests', () => {
     expect(async () => {
       await useCase.execute({
         uuid: 'non-existing-id',
-        nome: 'new nome',
-        endereco: 'new endereco',
+        name: 'new nome',
         email: 'new@email.com',
-        telefone: '1234567890',
+        phoneNumber: '1234567890',
       });
     }).rejects.toThrow(NotFoundError);
   });
 
   test('Should update client entity', async () => {
     const clientProps = {
-      nome: 'Nome Original',
-      endereco: 'Endereço Original',
+      name: 'Nome Original',
       email: 'original@email.com',
-      telefone: '123456789',
-      deleted: false,
+      phoneNumber: '123456789',
     };
     const client = Client.create(clientProps);
     await repo.create(await client);
 
     const updatedProps = {
-      nome: 'Nome Atualizado',
-      endereco: 'Endereço Atualizado',
+      name: 'Nome Atualizado',
       email: 'updated@email.com',
-      telefone: '987654321',
-      deleted: false,
+      phoneNumber: '987654321',
     };
 
     await useCase.execute({ uuid: (await client).uuid, ...updatedProps });

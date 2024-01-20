@@ -19,10 +19,9 @@ describe('Create client usecase unit tests', () => {
 
   test('Should create and return a client', async () => {
     const props = {
-      nome: 'Nome do Cliente',
-      endereco: 'Endereço do Cliente',
+      name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      telefone: '123456789',
+      phoneNumber: '123456789',
     };
 
     const client = await useCase.execute({ ...props });

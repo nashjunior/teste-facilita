@@ -23,10 +23,9 @@ describe('Delete client usecase unit tests', () => {
 
   test('Should delete a client', async () => {
     const clientProps = {
-      nome: 'Nome do Cliente',
-      endereco: 'Endereço do Cliente',
+      name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      telefone: '123456789',
+      phoneNumber: '123456789',
     };
     const client = Client.create(clientProps);
 
