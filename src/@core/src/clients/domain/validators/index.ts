@@ -1,13 +1,16 @@
 import { IValidatorFields } from '#seedwork/domain/validators/ivalidator';
-import {
-  IUserProps,
-} from '../entities';
-import { UserValidator } from './user.validator';
+import { IClientProps } from '../entities';
+import { ClientValidator } from './client.validator';
+import { ClientCoordinateValidator } from './client-coordinates.validator';
+import { IClientCoordinateProps } from '../entities/client-coordinates';
 
-
-export class UserValidatorFactory {
-  static create(): IValidatorFields<IUserProps> {
-    return new UserValidator();
+export class ClientValidatorFactory {
+  static create(): IValidatorFields<IClientProps> {
+    return new ClientValidator();
   }
 }
-
+export class ClientCoordinateValidatorFactory {
+  static create(): IValidatorFields<IClientCoordinateProps> {
+    return new ClientCoordinateValidator();
+  }
+}
