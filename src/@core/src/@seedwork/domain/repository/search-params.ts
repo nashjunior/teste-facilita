@@ -1,6 +1,6 @@
 import { ISearchProps } from './i-repository';
 
-export class SearchParams<Filter = string> {
+export class SearchParams<Filter = any> {
   protected _page = 1;
   protected _perPage = 10;
   protected _sort: string[];

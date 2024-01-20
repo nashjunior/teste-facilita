@@ -10,7 +10,7 @@ type ISearchResultProps<E, Filter> = {
   filter: Filter | null;
 };
 
-export class SearchResult<E extends Entity, Filter = string> {
+export class SearchResult<E extends Entity, Filter = any> {
   readonly items: E[];
   readonly total: number;
   readonly currentPage: number;
