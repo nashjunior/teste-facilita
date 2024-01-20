@@ -8,10 +8,9 @@ import { ClientValidatorFactory } from '../validators';
 import { EntityValidationError } from '#seedwork/domain/errors';
 
 export type IClientProps = {
-  nome: string;
-  endereco: string;
+  name: string;
   email: string;
-  telefone: string;
+  phoneNumber: string;
 };
 
 export type IClientJsonProps = Required<IClientProps>;
@@ -23,10 +22,10 @@ export class Client extends Entity<IClientProps, IClientJsonProps> {
     audit?: IAuditProps,
   ) {
     super(props, uuid, audit);
-    this.nome = props.nome;
-    this.endereco = props.endereco;
+
+    this.name = props.name;
     this.email = props.email;
-    this.telefone = props.telefone;
+    this.phoneNumber = props.phoneNumber;
   }
 
   static async create(
@@ -49,26 +48,17 @@ export class Client extends Entity<IClientProps, IClientJsonProps> {
 
   async update(props: IClientProps) {
     const data = await Client.validate(props);
-    this.nome = data.nome;
-    this.endereco = data.endereco;
+    this.name = data.name;
     this.email = data.email;
-    this.telefone = data.telefone;
+    this.phoneNumber = data.phoneNumber;
   }
 
-  get nome() {
-    return this.props.nome;
+  get name() {
+    return this.props.name;
   }
 
-  private set nome(newNome: string) {
-    this.props.nome = newNome;
-  }
-
-  get endereco() {
-    return this.props.endereco;
-  }
-
-  private set endereco(newEndereco: string) {
-    this.props.endereco = newEndereco;
+  private set name(newname: string) {
+    this.props.name = newname;
   }
 
   get email() {
@@ -79,21 +69,20 @@ export class Client extends Entity<IClientProps, IClientJsonProps> {
     this.props.email = newEmail;
   }
 
-  get telefone() {
-    return this.props.telefone;
+  get phoneNumber() {
+    return this.props.phoneNumber;
   }
 
-  private set telefone(newTelefone: string) {
-    this.props.telefone = newTelefone;
+  private set phoneNumber(newphoneNumber: string) {
+    this.props.phoneNumber = newphoneNumber;
   }
 
   toJSON(): Required<{ id: string } & IClientJsonProps> & IAuditJSONProps {
     return {
       id: this.uuid,
-      nome: this.nome,
-      endereco: this.endereco,
+      name: this.name,
       email: this.email,
-      telefone: this.telefone,
+      phoneNumber: this.phoneNumber,
       ...this.jsonAudit,
     };
   }
