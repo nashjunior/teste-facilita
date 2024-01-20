@@ -3,7 +3,11 @@ CREATE TABLE clients_coordinates (
     client_id UUID NOT NULL,
     latitude DECIMAL(9,6) NOT NULL,
     longitude DECIMAL(9,6) NOT NULL,
-    FOREIGN KEY (client_id) REFERENCES clientes(id)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    deleted BOOLEAN
+    FOREIGN KEY (client_id) REFERENCES clients(id)
 );
+
 CREATE INDEX idx_client_id ON client_id USING hash (client_id);
 
