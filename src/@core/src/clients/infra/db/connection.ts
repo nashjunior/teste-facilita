@@ -13,6 +13,8 @@ export class Database {
   }
 
   public static getInstance(): Database {
+    console.log('Getting database instance...');
+
     if (!Database.instance) {
       Database.instance = new Database();
     }
@@ -28,5 +30,3 @@ export class Database {
     console.log('Conexão com o banco de dados encerrada.');
   }
 }
-
-export default Database;
