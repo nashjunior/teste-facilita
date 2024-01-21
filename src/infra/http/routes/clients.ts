@@ -8,6 +8,8 @@ export const clientsRoutes = (
   options: FastifyPluginOptions,
   done: (error?: Error) => void
 ) => {
+  fastify.get('/', clientsController.list)
+  fastify.get('/:id', clientsController.find)
   fastify.post('/', clientsController.create)
   done()
 }
