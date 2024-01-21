@@ -1,4 +1,4 @@
-import { InvalidUUIDError,NotFoundError,ValidationError } from '#seedwork/domain/errors';
+import { InvalidUUIDError,NotFoundError, EntityValidationError } from '#seedwork/domain/errors';
 import { EmailAlreadyExistentError } from '#clients/domain/errors';
 import { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 
@@ -31,7 +31,7 @@ export const errorMiddleware = (
   }
 
 
-  if (err instanceof ValidationError) {
+  if (err instanceof EntityValidationError) {
     error = {
       statusCode: 422,
       error: err.name,

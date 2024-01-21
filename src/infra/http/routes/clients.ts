@@ -11,5 +11,6 @@ export const clientsRoutes = (
   fastify.get('/', clientsController.list)
   fastify.get('/:id', clientsController.find)
   fastify.post('/', clientsController.create)
+  fastify.put('/:id', clientsController.update)
   done()
 }
