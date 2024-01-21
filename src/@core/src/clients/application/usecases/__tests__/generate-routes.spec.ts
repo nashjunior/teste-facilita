@@ -1,5 +1,5 @@
 import { Client, ClientCoordinate } from '#clients/domain';
-import { C, ClientsCoordinatesInMemoryRepository } from '#clients/infra';
+import { ClientsCoordinatesInMemoryRepository } from '#clients/infra';
 import { Usecase } from '../generate-routes';
 
 describe('Test suit to visit all coordinates', () => {
@@ -32,6 +32,6 @@ describe('Test suit to visit all coordinates', () => {
 
     const respose = await usecase.execute();
 
-    console.log(respose);
+    expect.assertions(0);
   });
 });
