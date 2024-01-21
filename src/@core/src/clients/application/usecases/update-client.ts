@@ -13,7 +13,7 @@ export class Usecase {
 
     const entity = await this.usersRepository.findById(uuid);
 
-    entity.update(data);
+    await entity.update(data);
 
     await this.usersRepository.update(entity);
 
