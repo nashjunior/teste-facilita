@@ -5,14 +5,11 @@ import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 
 export class ClientRepository implements ClientsRepository.Repository {
   protected applyFilter(filter: ClientsRepository.Filter | null): string {
-    if (filter == null) return '';
-    if (filter.fields.length < 1) return '';
+    if (!this.hasFilters(filter)) return '';
 
     const queryParams = filter.fields
       .map(
-        (f, index) => `($${index + 1} ILIKE $${
-          (filter?.fields.length ?? 1) + 1
-        })
+        (f, index) => `(${f} ILIKE '%${filter?.query}%')
     `,
       )
       .join(' OR ');
@@ -43,6 +40,10 @@ export class ClientRepository implements ClientsRepository.Repository {
     return ` ORDER BY ${mappedOrderBy}`;
   }
 
+  hasFilters(filter: ClientsRepository.Filter | null): boolean {
+    return filter != null && filter.fields.length > 0 && !!filter.query;
+  }
+
   async search(
     props: ClientsRepository.SearchParams,
   ): Promise<ClientsRepository.SearchResult> {
@@ -62,30 +63,35 @@ export class ClientRepository implements ClientsRepository.Repository {
 
     const finalQueryCountAll = queryCountItems.concat(stringApplyFilter);
 
-    console.log({
-      finalQueryCountAll,
-      finalQuerySelectAll,
-    });
+    // const paramsQuery = this.hasFilters(props.filter)
+    //   ? [
+    //       ...Object.values(props._filter?.fields ?? []),
+    //       `%${props._filter?.query}%`,
+    //     ].filter(f => !!f)
+    //   : undefined;
 
-    const paramsQuery = [
-      ...Object.values(props._filter?.fields ?? []),
-      props._filter?.query,
-    ].filter(f => !!f);
-
-    const [response] = await Promise.all([
-      Database.getInstance().query(
-        finalQuerySelectAll,
-        paramsQuery.length > 0 ? paramsQuery : undefined,
-      ),
-      Database.getInstance().query(
-        finalQueryCountAll,
-        paramsQuery.length > 0 ? paramsQuery : undefined,
-      ),
+    const [response, totalItems] = await Promise.all([
+      Database.getInstance().query(finalQuerySelectAll),
+      Database.getInstance().query(finalQueryCountAll),
     ]);
 
+    const items = await Promise.all(
+      response.rows.map(row =>
+        Client.create(
+          { name: row.name, email: row.email, phoneNumber: row.phone_number },
+          new UniqueEntityId(row.id),
+          {
+            createdAt: row.created_at,
+            updatedAt: row.updated_at,
+            deleted: row.deleted,
+          },
+        ),
+      ),
+    );
+
     return new ClientsRepository.SearchResult({
-      items: [],
-      total: 1,
+      items,
+      total: totalItems.rows[0].count,
       filter: props.filter,
       sort: props.sort,
       orderSort: props.orderSort,
@@ -156,8 +162,8 @@ export class ClientRepository implements ClientsRepository.Repository {
 
   async update(client: Client): Promise<void> {
     const query = `
-    UPDATE table clients set( name, email, phone_number,  updated_at)
-    VALUES ($2, $3, $4, $5) WHERE id=$1 and deleted = false
+    UPDATE clients set name = $2, email = $3, phone_number = $4,  updated_at=$5
+    WHERE id=$1 and deleted = false
   `;
     const parameters = [
       client.uuid,
