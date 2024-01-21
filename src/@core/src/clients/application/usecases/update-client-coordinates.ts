@@ -1,18 +1,34 @@
-import { ClientCoordinate } from '#clients/domain';
-import { ISearchableRepository } from '#seedwork/domain';
+import {
+  ClientCoordinate,
+  ClientsCoordinatesRepository,
+  ClientsRepository,
+} from '#clients/domain';
+
+import { IClientOutput } from '../dto';
+
 export class Usecase {
   constructor(
-    private readonly clientCoordinateRepository: ISearchableRepository<ClientCoordinate>,
+    private readonly clientCoordinateRepository: ClientsCoordinatesRepository.Repository,
+    private readonly clientRepository: ClientsRepository.Repository,
   ) {}
 
-  async execute({ id, ...data }: IInput): Promise<IClientsCoordinatesOutput> {
-    const entity = await this.clientCoordinateRepository.findById(id);
+  async execute({ id, ...data }: IInput): Promise<IClientOutput> {
+    const clientEntity = await this.clientRepository.findById(id);
+    const coordinateEntity =
+      await this.clientCoordinateRepository.findByIdClient(id);
 
-    entity.update(data);
+    if (coordinateEntity) {
+      await coordinateEntity.update(data);
+      await this.clientCoordinateRepository.update(coordinateEntity);
+    } else {
+      const coordinateNew = await ClientCoordinate.create(clientEntity, {
+        latitude: data.latitude,
+        longitude: data.longitude,
+      });
+      await this.clientCoordinateRepository.create(coordinateNew);
+    }
 
-    await this.clientCoordinateRepository.update(entity);
-
-    return entity.toJSON();
+    return clientEntity.toJSON();
   }
 }
 
