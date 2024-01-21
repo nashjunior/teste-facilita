@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ClientRepository,ClientCoordinatesRepository } from "#clients/infra/repositories/postgresql";
+import { ClientRepository,ClientsCoordinatesRepository } from "#clients/infra/repositories/postgresql";
 import { CreateClientUsecase,UpdateClientCoordinateUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
 import { ClientsRepository } from "#clients/domain";
 
@@ -65,7 +65,7 @@ export class ClientsController {
     const repository = new ClientRepository()
     const createClientUsecase = new UpdateClientUsecase.Usecase(repository)
 
-    const repositoryCoordinate = new ClientCoordinatesRepository();
+    const repositoryCoordinate = new ClientsCoordinatesRepository();
 
     const updateClientReposiory = new UpdateClientCoordinateUsecase.Usecase(repositoryCoordinate,repository);
 
