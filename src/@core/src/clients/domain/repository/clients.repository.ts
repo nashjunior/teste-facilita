@@ -6,7 +6,7 @@ import {
 } from '#seedwork/domain/repository';
 import { Client } from '../entities';
 
-export type Filter = { query: string };
+export type Filter = { query: string; fields: string[] };
 export class SearchParams extends DefaultParams<Filter> {}
 export class SearchResult extends DefaultResult<Client, Filter> {}
 
