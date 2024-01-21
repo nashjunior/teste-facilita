@@ -49,7 +49,7 @@ export class ClientsController {
 
     const client = await createClientUsecase.execute({uuid: request.params.id})
 
-    return response.status(201).send(client)
+    return response.status(200).send(client)
   }
 
   async create(request: FastifyRequest<{Body: CreateClientUsecase.Input}>, response: FastifyReply) {
@@ -68,19 +68,17 @@ export class ClientsController {
     const repositoryCoordinate = new ClientCoordinatesRepository();
 
     const updateClientReposiory = new UpdateClientCoordinateUsecase.Usecase(repositoryCoordinate,repository);
-    
+
 
     const client = await createClientUsecase.execute({
       uuid: request.params.id,
       ...request.body
     })
-    const coordinates = await updateClientReposiory.execute(
-      {
-        id: request.params.id,
-        latitude: request.body.latitude,
-        longitude: request.body.longitude
-      }
-      )
+
+    await updateClientReposiory.execute({      id: request.params.id,
+      latitude: request.body.latitude,
+      longitude: request.body.longitude
+    })
 
     return response.status(200).send(client)
   }
