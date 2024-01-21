@@ -4,14 +4,96 @@ import { Database } from '#clients/infra/db'; // Ajuste o caminho de importaçã
 import { InvalidUUIDError, UniqueEntityId } from '#seedwork/domain';
 
 export class ClientRepository implements ClientsRepository.Repository {
+  protected applyFilter(filter: ClientsRepository.Filter | null): string {
+    if (filter == null) return '';
+
+    const queryParams = filter.fields
+      .map(
+        (f, index) => `($${index + 1} ILIKE $${
+          (filter?.fields.length ?? 1) + 1
+        })
+    `,
+      )
+      .join(' OR ');
+
+    return ` AND (${queryParams})`;
+  }
+
+  protected applyPagination(filter: ClientsRepository.SearchParams): string {
+    return ` OFFSET ${filter.page * filter.perPage - filter.perPage} LIMIT ${
+      filter.perPage
+    }`;
+  }
+
+  protected applySort(filter: ClientsRepository.SearchParams): string {
+    if (filter.orderSort == null || filter.sort == null) return '';
+    //feito condicionar apenas por causa da tipagem, poderia incluir em um único if
+    if (
+      filter.orderSort.length < 1 ||
+      filter.sort.length < 1 ||
+      filter.orderSort.length !== filter.sort.length
+    )
+      return '';
+
+    const mappedOrderBy: string = filter.sort
+      .map((f, index) => ` ${f} ${filter.orderSort?.[index]}`)
+      .join(',');
+
+    return ` ORDER BY ${mappedOrderBy}`;
+  }
+
   findAndCount(): Promise<{ total: number; items: Client[] }> {
     throw new Error('Method not implemted');
   }
 
-  search(
+  async search(
     props: ClientsRepository.SearchParams,
   ): Promise<ClientsRepository.SearchResult> {
-    throw new Error('Method not implemted');
+    const queryFindItems = `SELECT c.* FROM clients c where c.deleted = false`;
+    const queryCountItems = `SELECT COUNT(c.*) FROM clients c where c.deleted = false`;
+
+    const stringApplyFilter = this.applyFilter(props._filter);
+    const stringApplySort = this.applySort(props);
+    const stringApplyPagination = this.applyPagination(props);
+
+    const finalQuerySelectAll = queryFindItems
+      .concat(stringApplyFilter)
+      .concat(stringApplySort)
+      .concat(stringApplyPagination);
+
+    const finalQueryCountAll = queryCountItems
+      .concat(stringApplyFilter)
+      .concat(stringApplyPagination);
+
+    const paramsQuery = [
+      ...Object.values(props._filter?.fields ?? []),
+      props._filter?.query,
+    ];
+
+    console.log(finalQueryCountAll);
+
+    const [response] = await Promise.all([
+      Database.getInstance().query(
+        finalQuerySelectAll,
+        paramsQuery.length > 0 ? paramsQuery : undefined,
+      ),
+      Database.getInstance().query(
+        finalQueryCountAll,
+        paramsQuery.length > 0 ? paramsQuery : undefined,
+      ),
+    ]);
+
+    console.log(response.rows);
+
+    return new ClientsRepository.SearchResult({
+      items: [],
+      total: 1,
+      filter: props.filter,
+      sort: props.sort,
+      orderSort: props.orderSort,
+      currentPage: props.page,
+      perPage: props.perPage,
+    });
   }
 
   async createBatch(instances: Client[]): Promise<void> {
