@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ClientRepository } from "#clients/infra/repositories/postgresql";
-import { CreateClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
+import { CreateClientUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
 import { ClientsRepository } from "#clients/domain";
 
 export type IParamsListClients = {
@@ -73,5 +73,12 @@ export class ClientsController {
     return response.status(200).send(client)
   }
 
+  async delete(request: FastifyRequest<{Params: {id: string}}>, response: FastifyReply) {
+    const repository = new ClientRepository()
+    const createClientUsecase = new DeleteClientUsecase.Usecase(repository)
 
+    await createClientUsecase.execute({uuid: request.params.id})
+
+    return response.status(204).send()
+  }
 }
