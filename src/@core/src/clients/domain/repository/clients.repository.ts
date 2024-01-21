@@ -16,5 +16,5 @@ export type Repository = ISearchableRepository<
   SearchParams,
   SearchResult
 > & {
-  findByEmail(email: string): Promise<void>;
+  findByEmail(email: string): Promise<Client | undefined>;
 };

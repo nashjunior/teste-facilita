@@ -1,5 +1,4 @@
 import { Client } from '#clients/domain/entities';
-import { EmailAlreadyExistentError } from '#clients/domain/errors/email-already-existent';
 import { ClientsRepository } from '#clients/domain/repository';
 import { Database } from '#clients/infra/db'; // Ajuste o caminho de importação conforme necessário
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
@@ -7,6 +6,7 @@ import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 export class ClientRepository implements ClientsRepository.Repository {
   protected applyFilter(filter: ClientsRepository.Filter | null): string {
     if (filter == null) return '';
+    if (filter.fields.length < 1) return '';
 
     const queryParams = filter.fields
       .map(
@@ -62,12 +62,15 @@ export class ClientRepository implements ClientsRepository.Repository {
 
     const finalQueryCountAll = queryCountItems.concat(stringApplyFilter);
 
+    console.log({
+      finalQueryCountAll,
+      finalQuerySelectAll,
+    });
+
     const paramsQuery = [
       ...Object.values(props._filter?.fields ?? []),
       props._filter?.query,
-    ];
-
-    console.log(finalQuerySelectAll);
+    ].filter(f => !!f);
 
     const [response] = await Promise.all([
       Database.getInstance().query(
@@ -173,7 +176,7 @@ export class ClientRepository implements ClientsRepository.Repository {
     const response = await Database.getInstance().query(query, parameters);
     if (response.rows.length < 1) throw new NotFoundError('User not found');
 
-    const client = await Client.create(
+    return Client.create(
       {
         name: response.rows[0].name,
         email: response.rows[0].email,
@@ -186,16 +189,29 @@ export class ClientRepository implements ClientsRepository.Repository {
         deleted: response.rows[0].deleted,
       },
     );
-    return client;
   }
 
-  async findByEmail(email: string): Promise<void> {
+  async findByEmail(email: string): Promise<Client | undefined> {
     const query = `SELECT * from clients  WHERE email=$1 and deleted=false`;
     const parameters = [email];
 
     const response = await Database.getInstance().query(query, parameters);
 
-    if (response.rows.length > 0) throw new EmailAlreadyExistentError(email);
+    if (response.rows.length < 1) return undefined;
+
+    return Client.create(
+      {
+        name: response.rows[0].name,
+        email: response.rows[0].email,
+        phoneNumber: response.rows[0].phone_number,
+      },
+      new UniqueEntityId(response.rows[0].id),
+      {
+        createdAt: new Date(response.rows[0].created_at),
+        updatedAt: response.rows[0].updatedAt,
+        deleted: response.rows[0].deleted,
+      },
+    );
   }
 
   async delete(id: string | UniqueEntityId): Promise<void> {
