@@ -13,6 +13,7 @@ export type ISearchProps<Filter = string> = {
 
 export interface IReadbleRepository<T extends Entity> {
   findById(id: string | UniqueEntityId): Promise<T>;
+  findByIdClient(id: string | UniqueEntityId): Promise<T>;
   find(): Promise<T[]>;
 }
 
