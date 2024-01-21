@@ -1,7 +1,8 @@
 import { Client } from '#clients/domain/entities';
+import { EmailAlreadyExistentError } from '#clients/domain/errors/email-already-existent';
 import { ClientsRepository } from '#clients/domain/repository';
 import { Database } from '#clients/infra/db'; // Ajuste o caminho de importação conforme necessário
-import { InvalidUUIDError, UniqueEntityId } from '#seedwork/domain';
+import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 
 export class ClientRepository implements ClientsRepository.Repository {
   protected applyFilter(filter: ClientsRepository.Filter | null): string {
@@ -42,15 +43,13 @@ export class ClientRepository implements ClientsRepository.Repository {
     return ` ORDER BY ${mappedOrderBy}`;
   }
 
-  findAndCount(): Promise<{ total: number; items: Client[] }> {
-    throw new Error('Method not implemted');
-  }
-
   async search(
     props: ClientsRepository.SearchParams,
   ): Promise<ClientsRepository.SearchResult> {
-    const queryFindItems = `SELECT c.* FROM clients c where c.deleted = false`;
-    const queryCountItems = `SELECT COUNT(c.*) FROM clients c where c.deleted = false`;
+    const baseQueryFromClients = 'FROM clients c where c.deleted = false';
+
+    const queryFindItems = `SELECT c.* ${baseQueryFromClients}`;
+    const queryCountItems = `SELECT COUNT(c.*) ${baseQueryFromClients}`;
 
     const stringApplyFilter = this.applyFilter(props._filter);
     const stringApplySort = this.applySort(props);
@@ -61,16 +60,14 @@ export class ClientRepository implements ClientsRepository.Repository {
       .concat(stringApplySort)
       .concat(stringApplyPagination);
 
-    const finalQueryCountAll = queryCountItems
-      .concat(stringApplyFilter)
-      .concat(stringApplyPagination);
+    const finalQueryCountAll = queryCountItems.concat(stringApplyFilter);
 
     const paramsQuery = [
       ...Object.values(props._filter?.fields ?? []),
       props._filter?.query,
     ];
 
-    console.log(finalQueryCountAll);
+    console.log(finalQuerySelectAll);
 
     const [response] = await Promise.all([
       Database.getInstance().query(
@@ -82,8 +79,6 @@ export class ClientRepository implements ClientsRepository.Repository {
         paramsQuery.length > 0 ? paramsQuery : undefined,
       ),
     ]);
-
-    console.log(response.rows);
 
     return new ClientsRepository.SearchResult({
       items: [],
@@ -176,7 +171,7 @@ export class ClientRepository implements ClientsRepository.Repository {
     const query = `SELECT * from clients  WHERE id=$1 and deleted=false`;
     const parameters = [typeof id === 'string' ? id : id.value];
     const response = await Database.getInstance().query(query, parameters);
-    if (response.rows.length < 1) throw new InvalidUUIDError();
+    if (response.rows.length < 1) throw new NotFoundError('User not found');
 
     const client = await Client.create(
       {
@@ -194,6 +189,15 @@ export class ClientRepository implements ClientsRepository.Repository {
     return client;
   }
 
+  async findByEmail(email: string): Promise<void> {
+    const query = `SELECT * from clients  WHERE email=$1 and deleted=false`;
+    const parameters = [email];
+
+    const response = await Database.getInstance().query(query, parameters);
+
+    if (response.rows.length > 0) throw new EmailAlreadyExistentError(email);
+  }
+
   async delete(id: string | UniqueEntityId): Promise<void> {
     const query = `
       UPDATE clients
@@ -206,7 +210,24 @@ export class ClientRepository implements ClientsRepository.Repository {
     await Database.getInstance().query(query, parameters);
   }
 
-  async find(filter: ClientsRepository.Filter): Promise<Client[]> {
+  async find(): Promise<Client[]> {
+    const query = `SELECT * from clients WHERE deleted=false`;
+
+    const response = await Database.getInstance().query(query);
+
+    return Promise.all(
+      response.rows.map(row =>
+        Client.create(
+          { name: row.name, email: row.email, phoneNumber: row.phone_number },
+          new UniqueEntityId(row.id),
+          {
+            createdAt: row.created_at,
+            updatedAt: row.updated_at,
+            deleted: row.deleted,
+          },
+        ),
+      ),
+    );
     // ... implementação similar ao método create
   }
 
