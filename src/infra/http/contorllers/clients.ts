@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ClientRepository } from "#clients/infra/repositories/postgresql";
-import { CreateClientUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
+import { ClientRepository,ClientCoordinatesRepository } from "#clients/infra/repositories/postgresql";
+import { CreateClientUsecase,UpdateClientCoordinateUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
 import { ClientsRepository } from "#clients/domain";
 
 export type IParamsListClients = {
@@ -61,14 +61,26 @@ export class ClientsController {
     return response.status(201).send(client)
   }
 
-  async update(request: FastifyRequest<{Params:{id: string},Body: CreateClientUsecase.Input}>, response: FastifyReply) {
+  async update(request: FastifyRequest<{Params:{id: string},Body: CreateClientUsecase.Input & UpdateClientCoordinateUsecase.IInput}>, response: FastifyReply) {
     const repository = new ClientRepository()
     const createClientUsecase = new UpdateClientUsecase.Usecase(repository)
+
+    const repositoryCoordinate = new ClientCoordinatesRepository();
+
+    const updateClientReposiory = new UpdateClientCoordinateUsecase.Usecase(repositoryCoordinate,repository);
+    
 
     const client = await createClientUsecase.execute({
       uuid: request.params.id,
       ...request.body
     })
+    const coordinates = await updateClientReposiory.execute(
+      {
+        id: request.params.id,
+        latitude: request.body.latitude,
+        longitude: request.body.longitude
+      }
+      )
 
     return response.status(200).send(client)
   }
