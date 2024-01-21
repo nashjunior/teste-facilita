@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import environment from '../config/enviroment';
+import environment from '../config';
 
 export class Database {
   private static instance: Database;

@@ -1,4 +1,4 @@
-import { errorMiddleware } from "#infra/http/middlewares/error";
+import { errorMiddleware } from "#infra/http/middlewares";
 import { generateRoutes } from "#infra/http/routes";
 import fastifyCors from "@fastify/cors";
 import fastify from "fastify";
