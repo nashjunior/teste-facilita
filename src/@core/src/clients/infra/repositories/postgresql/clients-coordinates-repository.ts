@@ -1,14 +1,14 @@
 import { Database } from '#clients/infra/db';
 import { ClientCoordinate } from '#clients/domain/entities/client-coordinates';
-import { ClientsCoordinatesRepository } from '#clients/domain/repository';
+import { ClientsCoordinatesRepository as ClientsCoordinatesRepositoryContract } from '#clients/domain/repository';
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { Client } from '#clients/domain';
 
-export class ClientCoordinatesRepository
-  implements ClientsCoordinatesRepository.Repository
+export class ClientsCoordinatesRepository
+  implements ClientsCoordinatesRepositoryContract.Repository
 {
   protected applyFilter(
-    filter: ClientsCoordinatesRepository.Filter | null,
+    filter: ClientsCoordinatesRepositoryContract.Filter | null,
   ): string {
     if (filter == null) return '';
 
@@ -25,7 +25,7 @@ export class ClientCoordinatesRepository
   }
 
   protected applyPagination(
-    filter: ClientsCoordinatesRepository.SearchParams,
+    filter: ClientsCoordinatesRepositoryContract.SearchParams,
   ): string {
     return ` OFFSET ${filter.page * filter.perPage - filter.perPage} LIMIT ${
       filter.perPage
@@ -33,7 +33,7 @@ export class ClientCoordinatesRepository
   }
 
   protected applySort(
-    filter: ClientsCoordinatesRepository.SearchParams,
+    filter: ClientsCoordinatesRepositoryContract.SearchParams,
   ): string {
     if (filter.orderSort == null || filter.sort == null) return '';
     //feito condicionar apenas por causa da tipagem, poderia incluir em um único if
@@ -52,8 +52,8 @@ export class ClientCoordinatesRepository
   }
 
   async search(
-    props: ClientsCoordinatesRepository.SearchParams,
-  ): Promise<ClientsCoordinatesRepository.SearchResult> {
+    props: ClientsCoordinatesRepositoryContract.SearchParams,
+  ): Promise<ClientsCoordinatesRepositoryContract.SearchResult> {
     const baseQueryJoinClients = `
     FROM clients_coordinates cc
       join clients c on cc.client_id = c.id
@@ -101,7 +101,7 @@ export class ClientCoordinatesRepository
       ),
     ]);
 
-    return new ClientsCoordinatesRepository.SearchResult({
+    return new ClientsCoordinatesRepositoryContract.SearchResult({
       items: [],
       total: 1,
       filter: props.filter,
