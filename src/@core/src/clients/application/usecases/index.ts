@@ -3,3 +3,4 @@ export * as FindClientUsecase from './find-client';
 export * as DeleteClientUsecase from './delete-client';
 export * as UpdateClientUsecase from './update-client';
 export * as GenerateRouteUsecase from './generate-routes';
+export * as ListClientsUsecase from './list-clients';
