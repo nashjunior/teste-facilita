@@ -287,6 +287,50 @@ export class ClientCoordinatesRepository
       },
     );
   }
+  async findByIdClient(
+    id: UniqueEntityId | string,
+  ): Promise<ClientCoordinate | undefined> {
+    const query = `SELECT
+    cc.*,
+    c.name,
+    c.email,
+    c.phone_number,
+    c.deleted as deleted_client,
+    c.created_at as created_at_client,
+    c.updated_at as updated_at_client
+    FROM clients_coordinates cc
+      join clients c on cc.client_id = c.id
+    WHERE c.id = $1 and cc.deleted = false`;
+    const values = [typeof id === 'string' ? id : id.value];
+
+    const response = await Database.getInstance().query(query, values);
+    if (response.rows.length === 0) {
+      return undefined;
+    }
+
+    const row = response.rows[0];
+
+    const client = await Client.create(
+      { name: row.name, email: row.email, phoneNumber: row.phone_number },
+      new UniqueEntityId(row.client_id),
+      {
+        createdAt: row.created_at_client,
+        updatedAt: row.updated_at_client,
+        deleted: row.deleted_client,
+      },
+    );
+
+    return ClientCoordinate.create(
+      client,
+      { latitude: row.latitude, longitude: row.longitude },
+      new UniqueEntityId(row.id),
+      {
+        createdAt: row.created_at,
+        deleted: row.deleted,
+        updatedAt: row.updated_at,
+      },
+    );
+  }
 
   // Implemente outros métodos como delete, find, etc., conforme necessário
 }
