@@ -35,6 +35,7 @@ export class SearchResult<E extends Entity, Filter = any> {
     return {
       items: this.items,
       total: this.total,
+      totalPage: this.lastPage,
       currentPage: this.currentPage,
       perPage: this.perPage,
       lastPage: this.lastPage,
