@@ -1,10 +1,7 @@
-import { Client } from '#clients/domain';
-import { ISearchableRepository } from '#seedwork/domain';
+import { ClientsRepository } from '#clients/domain';
 
 export class Usecase {
-  constructor(
-    private readonly usersRepository: ISearchableRepository<Client>,
-  ) {}
+  constructor(private readonly usersRepository: ClientsRepository.Repository) {}
 
   async execute(data: IInput): Promise<void> {
     await this.usersRepository.delete(data.uuid);
