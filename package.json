@@ -10,9 +10,19 @@
     "./src/@core"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules ./src/server.ts"
+  },
+  "imports": {
+    "#seedwork/*": "./@core/dist/@seedwork/index.js",
+    "#clients/*": "./@core/dist/clients/index.js"
   },
   "devDependencies": {
-    "@types/pg": "^8.10.9"
+    "@types/pg": "^8.10.9",
+    "ts-node-dev": "^2.0.0"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "fastify": "^4.25.2"
   }
 }
