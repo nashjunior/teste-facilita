@@ -90,16 +90,16 @@ describe('Search params unit tests', () => {
       { filter: null, expected: null },
       { filter: undefined, expected: null },
       { filter: '', expected: null },
-      { filter: -1, expected: '-1' },
-      { filter: {}, expected: '[object Object]' },
-      { filter: true, expected: 'true' },
+      { filter: -1, expected: -1 },
+      { filter: {}, expected: {} },
+      { filter: true, expected: true },
       { filter: [], expected: null },
-      { filter: 5.1, expected: '5.1' },
+      { filter: 5.1, expected: 5.1 },
     ];
 
     arrange.forEach(validation => {
       const params = new SearchParams({ filter: validation.filter as any });
-      expect(params.filter).toBe(validation.expected);
+      expect(params.filter).toStrictEqual(validation.expected);
     });
   });
 });

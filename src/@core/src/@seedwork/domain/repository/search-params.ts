@@ -12,7 +12,7 @@ export class SearchParams<Filter = any> {
     this.perPage = props.perPage as number;
     this.sort = props.sort || null;
     this.orderSort = props.orderSort || null;
-    this.filter = props.filter || null;
+    this.filter = props.filter ?? null;
   }
 
   private set page(v: number | null) {
@@ -89,11 +89,32 @@ export class SearchParams<Filter = any> {
     return this._orderSort;
   }
 
-  private set filter(v: Filter | null) {
+  protected set filter(v: Filter | null) {
+    switch (typeof v) {
+      case 'string':
+        this._filter = v.toString().trim() === '' ? null : v;
+        break;
+
+      case 'boolean':
+        this._filter = v;
+        break;
+
+      case 'number':
+        this._filter = Number.isNaN(v) ? null : v;
+        break;
+      case 'object':
+        console.log(v);
+
+        this._filter = v == null || Object.entries(v).length < 1 ? null : v;
+        break;
+
+      default:
+        this._filter = null;
+        break;
+    }
+
     this._filter =
-      v === null || v === undefined || v.toString().trim() === ''
-        ? null
-        : (v.toString() as Filter);
+      v === null || v === undefined || v.toString().trim() === '' ? null : v;
   }
 
   public get filter(): Filter | null {
