@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "build": "swc src --out-dir dist ./swcrc",
+    "build": "rm -rf dist && swc src --out-dir dist ./swcrc",
     "build:types": "tsc -d --declarationDir dist/@types --declarationMap --emitDeclarationOnly",
     "build:watch": "concurrently \"yarn build -- -w\"  \"yarn build:types -- -w\"",
     "clean:tsc": "rm tsconfig.tsbuildinfo",

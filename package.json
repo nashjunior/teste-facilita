@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "build:app": "swc src --out-dir dist ./swcrc",
+    "build:app": "rm -rf dist && swc src --out-dir dist ./swcrc",
     "build": " npm run build -ws @facilita-juridico/core && npm run build:app",
     "start": "node ./dist/server.js",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules ./src/server.ts"
