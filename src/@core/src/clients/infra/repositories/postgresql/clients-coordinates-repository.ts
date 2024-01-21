@@ -1,7 +1,7 @@
 import { Database } from '#clients/infra/db';
 import { ClientCoordinate } from '#clients/domain/entities/client-coordinates';
 import { ClientsCoordinatesRepository } from '#clients/domain/repository';
-import { InvalidUUIDError, UniqueEntityId } from '#seedwork/domain';
+import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { Client } from '#clients/domain';
 
 export class ClientCoordinatesRepository
@@ -161,9 +161,14 @@ export class ClientCoordinatesRepository
     WHERE id = $1 and deleted = false
   `;
 
-    const parameters = [typeof id === 'string' ? id : id.value, new Date()];
+    const stringId = typeof id === 'string' ? id : id.value;
 
-    await Database.getInstance().query(query, parameters);
+    const parameters = [stringId, new Date()];
+
+    const response = await Database.getInstance().query(query, parameters);
+
+    if (response.rowCount != null && response.rowCount < 1)
+      throw new NotFoundError(`Item not found using id ${stringId}`);
   }
 
   async find(): Promise<ClientCoordinate[]> {
@@ -254,8 +259,10 @@ export class ClientCoordinatesRepository
       join clients c on cc.client_id = c.id
     WHERE cc.id = $1 and cc.deleted = false`;
     const values = [typeof id === 'string' ? id : id.value];
+
     const response = await Database.getInstance().query(query, values);
-    if (response.rows.length === 0) throw new InvalidUUIDError();
+    if (response.rows.length === 0)
+      throw new NotFoundError(`Item not found using id ${id}`);
 
     const row = response.rows[0];
 
