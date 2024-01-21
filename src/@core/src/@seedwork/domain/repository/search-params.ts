@@ -103,8 +103,6 @@ export class SearchParams<Filter = any> {
         this._filter = Number.isNaN(v) ? null : v;
         break;
       case 'object':
-        console.log(v);
-
         this._filter = v == null || Object.entries(v).length < 1 ? null : v;
         break;
 

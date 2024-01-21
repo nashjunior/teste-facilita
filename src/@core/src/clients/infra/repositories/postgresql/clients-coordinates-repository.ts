@@ -90,8 +90,6 @@ export class ClientCoordinatesRepository
       props._filter?.query,
     ];
 
-    console.log(finalQuerySelectAll);
-
     const [response] = await Promise.all([
       Database.getInstance().query(
         finalQuerySelectAll,

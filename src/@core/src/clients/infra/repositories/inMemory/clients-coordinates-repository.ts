@@ -2,7 +2,7 @@ import { ClientCoordinate } from '#clients/domain/entities';
 import { ClientsCoordinatesRepository } from '#clients/domain/repository';
 import { InMemorySearchbleRepository } from '#seedwork/domain/repository';
 
-export class ClientsInMemoryRepository
+export class ClientsCoordinatesInMemoryRepository
   extends InMemorySearchbleRepository<ClientCoordinate>
   implements ClientsCoordinatesRepository.Repository
 {
