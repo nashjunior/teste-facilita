@@ -199,15 +199,34 @@ export class ClientRepository implements ClientsRepository.Repository {
   }
 
   async delete(id: string | UniqueEntityId): Promise<void> {
-    const query = `
+    const queryDeleteClientCoordinates = `
+    UPDATE clients_coordinates
+      SET deleted = true, updated_at = $2
+    WHERE client_id = $1 and deleted = false
+    `;
+
+    const queryDeleteClient = `
       UPDATE clients
       SET deleted = true, updated_at = $2
       WHERE id = $1 and deleted = false
     `;
 
-    const parameters = [typeof id === 'string' ? id : id.value, new Date()];
+    const stringId = typeof id === 'string' ? id : id.value;
 
-    await Database.getInstance().query(query, parameters);
+    const parameters = [stringId, new Date()];
+
+    await Database.getInstance().query(
+      queryDeleteClientCoordinates,
+      parameters,
+    );
+
+    const response = await Database.getInstance().query(
+      queryDeleteClient,
+      parameters,
+    );
+
+    if (response.rowCount != null && response.rowCount < 1)
+      throw new NotFoundError(`Item not found using id ${stringId}`);
   }
 
   async find(): Promise<Client[]> {
