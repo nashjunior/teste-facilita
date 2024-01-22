@@ -25,7 +25,7 @@
 ### Command to run Backend
 
 1. git checkout develop
-2. Run the [migrations](src/@core/src/clients/infra/db/migrations/README.MD)
+2. Run the [migrations](https://github.com/nashjunior/teste-facilita/blob/develop/src/@core/src/clients/infra/db/migrations/README.MD)
 3. Install the packages
     - npm
       ```bash
