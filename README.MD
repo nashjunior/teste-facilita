@@ -26,7 +26,16 @@
 
 1. git checkout develop
 2. Run the [migrations](src/@core/src/clients/infra/db/migrations/README.MD)
-3. Set your .env like
+3. Install the packages
+    - npm
+      ```bash
+      npm i
+      ```
+    - yarn
+      ```bash
+      yarn
+      ```
+4. Set your .env like
   ```javascript
   DB_USER=postgres
   DB_HOST=<your ip>
@@ -35,9 +44,24 @@
   DB_PORT=5432
   PORT=<your port (default - 4000)>
   ```
-4. yarn build
-5. yarn start
-
+5. Build the project
+    - npm
+      ```bash
+      npm run build
+      ```
+    - yarn
+      ```bash
+      yarn build
+      ```
+6. Run the project
+    - npm
+      ```bash
+      npm run start
+      ```
+    - yarn
+      ```bash
+      yarn start
+      ```
 ## Approach
 
 This api is constructed using a mono repo.
