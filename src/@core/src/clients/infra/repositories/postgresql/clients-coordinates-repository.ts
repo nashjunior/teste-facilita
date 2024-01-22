@@ -4,7 +4,7 @@ import { ClientsCoordinatesRepository as ClientsCoordinatesRepositoryContract } 
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 import { Client } from '#clients/domain';
 
-export class ClientsCoordinatesRepository
+export class ClientsCoordinatesPostgresRepository
   implements ClientsCoordinatesRepositoryContract.Repository
 {
   protected applyFilter(
@@ -72,6 +72,7 @@ export class ClientsCoordinatesRepository
     `;
     const queryCountItems = `SELECT COUNT(cc.*) ${baseQueryJoinClients}`;
 
+    //@ts-expect-error access method filter not work, so i have to use variable itself
     const stringApplyFilter = this.applyFilter(props._filter);
     const stringApplySort = this.applySort(props);
     const stringApplyPagination = this.applyPagination(props);
@@ -86,11 +87,13 @@ export class ClientsCoordinatesRepository
       .concat(stringApplyPagination);
 
     const paramsQuery = [
+      //@ts-expect-error access method filter not work, so i have to use variable itself
       ...Object.values(props._filter?.fields ?? []),
+      //@ts-expect-error access method filter not work, so i have to use variable itself
       props._filter?.query,
     ];
 
-    const [response] = await Promise.all([
+    await Promise.all([
       Database.getInstance().query(
         finalQuerySelectAll,
         paramsQuery.length > 0 ? paramsQuery : undefined,

@@ -5,6 +5,7 @@ import {
   SearchParams as DefaultParams,
 } from '#seedwork/domain/repository';
 import { ClientCoordinate } from '../entities';
+import { UniqueEntityId } from '#seedwork/domain';
 
 export type Filter = { query: string; fields: string[] };
 export class SearchParams extends DefaultParams<Filter> {}
@@ -15,4 +16,8 @@ export type Repository = ISearchableRepository<
   Filter,
   SearchParams,
   SearchResult
->;
+> & {
+  findByIdClient(
+    id: string | UniqueEntityId,
+  ): Promise<ClientCoordinate | undefined>;
+};

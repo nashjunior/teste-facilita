@@ -7,7 +7,9 @@ export class ClientsCoordinatesInMemoryRepository
   extends InMemorySearchbleRepository<ClientCoordinate>
   implements ClientsCoordinatesRepositoryContract.Repository
 {
-  findByIdClient(id: string | UniqueEntityId): Promise<ClientCoordinate> {
+  async findByIdClient(
+    id: string | UniqueEntityId,
+  ): Promise<ClientCoordinate | undefined> {
     return this.items.find(item =>
       typeof id === 'string'
         ? item.client.uuid === id
