@@ -10,7 +10,11 @@ export class ClientValidator extends YupValidator<IClientProps> {
         .shape({
           name: yup.string().required().max(255),
           email: yup.string().email().max(255),
-          phoneNumber: yup.string().min(10).max(20),
+          phoneNumber: yup
+            .string()
+            .min(10)
+            .max(20)
+            .matches(/^\+?\d+$/),
         })
         .required()
         .noUnknown(),
