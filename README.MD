@@ -15,7 +15,6 @@
 ## Technologies used:
 
 - NodeJS --- Fastify.
-- JWT ---
 - TypeORM
 - Yup
 - UUID
