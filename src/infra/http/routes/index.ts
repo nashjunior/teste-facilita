@@ -2,9 +2,14 @@ import { FastifyInstance } from "fastify";
 import { clientsRoutes } from "./clients";
 import { generateRouteRoutes } from "./route";
 
+export const defaultAuditTypes = {
+  createdAt: { type: 'string', format: 'date-time' },
+  updatedAt: { type: ['string', 'null'], format: 'date-time' },
+  deleted: { type: ['boolean'], default: 'false'},
+}
+
 export const defaultItemResponseType = {
   properties: {
-    // Define the properties expected in the response
     id: {
       type: 'string',
       format: 'uuid'
@@ -18,9 +23,8 @@ export const defaultItemResponseType = {
     type: 'string',
     format: '+XXXXXXXXX'
   },
-  createdAt: { type: 'string', format: 'date-time' },
-  updatedAt: { type: ['string', 'null'], format: 'date-time' },
-  deleted: { type: ['boolean'], default: 'false'},
+  ...defaultAuditTypes
+
   },
 }
 

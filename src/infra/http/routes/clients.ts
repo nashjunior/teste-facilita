@@ -117,12 +117,11 @@ export const clientsRoutes = (
       tags:['Client'],
       body: {
         type: 'object',
-        required: ['name', 'email', 'phoneNumber'], // Specify required properties
+        required: ['name', 'email', 'phoneNumber'],
         properties: {
           name: { type: 'string' },
           email: { type: 'string', format: 'email' },
           phoneNumber: { type: 'string' },
-          // ... other properties in the request body
         },
       },
       response: {
@@ -147,14 +146,13 @@ export const clientsRoutes = (
       },
       body: {
         type: 'object',
-        required: ['name', 'email', 'phoneNumber', 'latitude', 'longitude'], // Specify required properties
+        required: ['name', 'email', 'phoneNumber', 'latitude', 'longitude'],
         properties: {
           name: { type: 'string' },
           email: { type: 'string', format: 'email' },
           phoneNumber: { type: 'string' },
           latitude: { type: 'number' },
           longitude: { type: 'number' },
-          // ... other properties in the request body
         },
       },
       response: {

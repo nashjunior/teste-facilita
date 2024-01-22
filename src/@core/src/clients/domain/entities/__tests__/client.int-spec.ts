@@ -28,14 +28,4 @@ describe('Integration tests for client entity', () => {
       expect(client.toJSON()).toMatchObject(props);
     });
   });
-
-  describe('should validate on update', () => {
-    it('should throw an error on invalid client on update', async () => {
-      // Adicione casos de teste para verificar a validação em cenários inválidos durante a atualização
-    });
-
-    it('should return a valid client', async () => {
-      // Adicione casos de teste para verificar se a entidade é válida após a atualização
-    });
-  });
 });

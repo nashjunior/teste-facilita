@@ -19,7 +19,6 @@ describe('Find client usecase unit tests', () => {
   });
 
   test('Should return a valid client entity', async () => {
-    // Supondo que você tenha um método 'create' no Client que cria a entidade sem salvar no repositório
     const clientProps = {
       name: 'Nome do Cliente',
       email: 'email@cliente.com',
