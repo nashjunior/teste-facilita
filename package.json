@@ -6,10 +6,35 @@
   "repository": "https://github.com/nashjunior/teste-facilita-juridico.git",
   "author": "nashjunior <nashjuniorjj@gmail.com>",
   "license": "MIT",
-  "workspaces":[
+  "workspaces": [
     "./src/@core"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build:app": "rm -rf dist && swc src --out-dir dist ./swcrc",
+    "build": " npm run build -ws @facilita-juridico/core && npm run build:app",
+    "start": "node ./dist/server.js",
+    "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules ./src/server.ts"
+  },
+  "imports": {
+    "#seedwork/*": "./dist/@core/dist/@seedwork/index.js",
+    "#clients/*": "./dist/@core/dist/clients/index.js",
+    "#infra/*": "./dist/@core/dist/infra/index.js"
+  },
+  "exports": {
+    "./clients/domain": "./dist/@core/dist/clients/domain/index.js",
+    "./clients/infra": "./dist/@core/dist/clients/infra/index.js",
+    "./clients/application": "./dist/@core/dist/clients/application/index.js",
+    "./infra": "./dist/infra/index.js"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.9",
+    "ts-node-dev": "^2.0.0"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^2.1.0",
+    "fastify": "^4.25.2"
   }
 }

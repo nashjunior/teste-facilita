@@ -1,0 +1,22 @@
+{
+  "jsc": {
+      "parser": {
+          "syntax": "typescript",
+          "decorators": true
+      },
+      "baseUrl": "./src",
+      "target": "es2017",
+      "paths": {
+          "#seedwork/*": ["./@core/dist/@seedwork/*"],
+          "#clients/*": ["./@core/dist/clients/*"],
+          "#infra/*":["./infra"]
+      },
+      "transform": {
+        "legacyDecorator": true,
+        "decoratorMetadata": true
+      }
+  },
+  "module": {
+    "type": "commonjs"
+  }
+}
