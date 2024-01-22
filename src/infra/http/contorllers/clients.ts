@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ClientRepository,ClientsCoordinatesRepository } from "#clients/infra/repositories/postgresql";
+import { ClientsPostgresRepository,ClientsCoordinatesPostgresRepository } from "#clients/infra/repositories/postgresql";
 import { CreateClientUsecase,UpdateClientCoordinateUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
 import { ClientsRepository } from "#clients/domain";
 
@@ -34,7 +34,7 @@ export class ClientsController {
       perPage: per_page,
     })
 
-    const repository = new ClientRepository()
+    const repository = new ClientsPostgresRepository()
 
     const listCLientsUsecase = new ListClientsUsecase.Usecase(repository)
 
@@ -44,7 +44,7 @@ export class ClientsController {
   }
 
   async find(request: FastifyRequest<{Params: {id: string}}>, response: FastifyReply) {
-    const repository = new ClientRepository()
+    const repository = new ClientsPostgresRepository()
     const createClientUsecase = new FindClientUsecase.Usecase(repository)
 
     const client = await createClientUsecase.execute({uuid: request.params.id})
@@ -53,7 +53,7 @@ export class ClientsController {
   }
 
   async create(request: FastifyRequest<{Body: CreateClientUsecase.Input}>, response: FastifyReply) {
-    const repository = new ClientRepository()
+    const repository = new ClientsPostgresRepository()
     const createClientUsecase = new CreateClientUsecase.Usecase(repository)
 
     const client = await createClientUsecase.execute(request.body)
@@ -62,10 +62,10 @@ export class ClientsController {
   }
 
   async update(request: FastifyRequest<{Params:{id: string},Body: CreateClientUsecase.Input & UpdateClientCoordinateUsecase.IInput}>, response: FastifyReply) {
-    const repository = new ClientRepository()
+    const repository = new ClientsPostgresRepository()
     const createClientUsecase = new UpdateClientUsecase.Usecase(repository)
 
-    const repositoryCoordinate = new ClientsCoordinatesRepository();
+    const repositoryCoordinate = new ClientsCoordinatesPostgresRepository();
 
     const updateClientReposiory = new UpdateClientCoordinateUsecase.Usecase(repositoryCoordinate,repository);
 
@@ -84,7 +84,7 @@ export class ClientsController {
   }
 
   async delete(request: FastifyRequest<{Params: {id: string}}>, response: FastifyReply) {
-    const repository = new ClientRepository()
+    const repository = new ClientsPostgresRepository()
     const createClientUsecase = new DeleteClientUsecase.Usecase(repository)
 
     await createClientUsecase.execute({uuid: request.params.id})

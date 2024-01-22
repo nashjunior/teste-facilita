@@ -1,10 +1,10 @@
 import { GenerateRouteUsecase } from "#clients/application"
-import { ClientsCoordinatesRepository } from "#clients/infra/repositories/postgresql"
+import { ClientsCoordinatesPostgresRepository } from "#clients/infra/repositories/postgresql"
 import { FastifyReply, FastifyRequest } from "fastify"
 
 export class RoutesController {
   async generate(_: FastifyRequest, response: FastifyReply) {
-    const repository = new ClientsCoordinatesRepository()
+    const repository = new ClientsCoordinatesPostgresRepository()
     const createClientUsecase = new GenerateRouteUsecase.Usecase(repository)
 
     const client = await createClientUsecase.execute()
