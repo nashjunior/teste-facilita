@@ -65,6 +65,10 @@
 ## Approach
 
 This api is constructed using a mono repo.
+See the api in
+```bash
+http://<your-ip>:<port>/documentation
+```
 
 
 ### Folder structure
