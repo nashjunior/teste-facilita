@@ -3,16 +3,16 @@ import { ClientsRepository } from '#clients/domain/repository';
 import { Database } from '#clients/infra/db'; // Ajuste o caminho de importação conforme necessário
 import { NotFoundError, UniqueEntityId } from '#seedwork/domain';
 
-export class ClientRepository implements ClientsRepository.Repository {
+export class ClientsPostgresRepository implements ClientsRepository.Repository {
   protected applyFilter(filter: ClientsRepository.Filter | null): string {
     if (!this.hasFilters(filter)) return '';
 
-    const queryParams = filter.fields
-      .map(
-        (f, index) => `(${f} ILIKE '%${filter?.query}%')
+    const queryParams = (
+      filter?.fields.map(
+        f => `(${f} ILIKE '%${filter?.query}%')
     `,
-      )
-      .join(' OR ');
+      ) ?? []
+    ).join(' OR ');
 
     return ` AND (${queryParams})`;
   }
@@ -25,7 +25,7 @@ export class ClientRepository implements ClientsRepository.Repository {
 
   protected applySort(filter: ClientsRepository.SearchParams): string {
     if (filter.orderSort == null || filter.sort == null) return '';
-    //feito condicionar apenas por causa da tipagem, poderia incluir em um único if
+    //made conditional to query concat
     if (
       filter.orderSort.length < 1 ||
       filter.sort.length < 1 ||
@@ -52,6 +52,7 @@ export class ClientRepository implements ClientsRepository.Repository {
     const queryFindItems = `SELECT c.* ${baseQueryFromClients}`;
     const queryCountItems = `SELECT COUNT(c.*) ${baseQueryFromClients}`;
 
+    //@ts-expect-error  access filter not working, so i have to use _filter
     const stringApplyFilter = this.applyFilter(props._filter);
     const stringApplySort = this.applySort(props);
     const stringApplyPagination = this.applyPagination(props);
@@ -269,8 +270,5 @@ export class ClientRepository implements ClientsRepository.Repository {
         ),
       ),
     );
-    // ... implementação similar ao método create
   }
-
-  // Outros métodos como findById, findAll, etc., podem ser adicionados conforme necessário
 }
