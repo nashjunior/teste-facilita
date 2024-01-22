@@ -12,6 +12,8 @@ export const generateRouteRoutes = (
   fastify.get('/generate',
   {
     schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Route'],
       response: {
         200: {
           type: 'array',

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { ClientsController } from "../contorllers";
-import { defaultItemResponseType } from ".";
+import { defaultAuditTypes, defaultItemResponseType } from ".";
 
 
 
@@ -14,6 +14,8 @@ export const clientsRoutes = (
   fastify.get('/',
   {
     schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Client'],
       querystring: {
         type: 'object',
         properties: {
@@ -65,9 +67,35 @@ export const clientsRoutes = (
       }}
     },
   clientsController.list)
-  fastify.get('/:id/coordinates', clientsController.findCoordinate)
+  fastify.get('/:id/coordinates',
+  {
+    schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Client'],
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+        },
+      },
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            id: { type: 'string',format: 'uuid'},
+            clientId: {type: 'string',format: 'uuid'},
+            latitude: {type: 'number'},
+            longitude: {type: 'number'},
+          }
+        },
+      },
+    },
+  }
+  ,clientsController.findCoordinate)
   fastify.get('/:id',  {
     schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Client'],
       params: {
         type: 'object',
         properties: {
@@ -85,6 +113,8 @@ export const clientsRoutes = (
   fastify.post('/',
   {
     schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Client'],
       body: {
         type: 'object',
         required: ['name', 'email', 'phoneNumber'], // Specify required properties
@@ -107,6 +137,8 @@ export const clientsRoutes = (
   fastify.put('/:id',
   {
     schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Client'],
       params: {
         type: 'object',
         properties: {
@@ -137,6 +169,8 @@ export const clientsRoutes = (
   fastify.delete('/:id',
   {
     schema: {
+      //@ts-expect-error type not existsnt for key tags
+      tags:['Client'],
       params: {
         type: 'object',
         properties: {
