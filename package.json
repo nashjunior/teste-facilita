@@ -20,22 +20,21 @@
     "#seedwork/*": "./dist/@core/dist/@seedwork/index.js",
     "#clients/*": "./dist/@core/dist/clients/index.js",
     "#infra/*": "./dist/@core/dist/infra/index.js"
-
   },
   "exports": {
     "./clients/domain": "./dist/@core/dist/clients/domain/index.js",
     "./clients/infra": "./dist/@core/dist/clients/infra/index.js",
     "./clients/application": "./dist/@core/dist/clients/application/index.js",
     "./infra": "./dist/infra/index.js"
-
   },
-
   "devDependencies": {
     "@types/pg": "^8.10.9",
     "ts-node-dev": "^2.0.0"
   },
   "dependencies": {
     "@fastify/cors": "^8.5.0",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^2.1.0",
     "fastify": "^4.25.2"
   }
 }
