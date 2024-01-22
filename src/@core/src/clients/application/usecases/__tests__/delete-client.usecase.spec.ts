@@ -25,16 +25,16 @@ describe('Delete client usecase unit tests', () => {
     const clientProps = {
       name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      phoneNumber: '123456789',
+      phoneNumber: '123456789123123',
     };
-    const client = Client.create(clientProps);
+    const client = await Client.create(clientProps);
 
-    await repo.create(await client);
+    await repo.create(client);
 
-    await deleteClientUsecase.execute({ uuid: (await client).uuid });
+    await deleteClientUsecase.execute({ uuid: client.uuid });
 
     expect(async () => {
-      await findClientUsecase.execute({ uuid: (await client).uuid });
+      await findClientUsecase.execute({ uuid: client.uuid });
     }).rejects.toThrow(NotFoundError);
   });
 });

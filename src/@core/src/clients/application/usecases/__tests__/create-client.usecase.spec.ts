@@ -13,7 +13,7 @@ describe('Create client usecase unit tests', () => {
 
   test('Should throw an error on invalid input', async () => {
     expect(async () => {
-      await useCase.execute(undefined as any);
+      await useCase.execute({} as any);
     }).rejects.toThrow(EntityValidationError);
   });
 
@@ -21,7 +21,7 @@ describe('Create client usecase unit tests', () => {
     const props = {
       name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      phoneNumber: '123456789',
+      phoneNumber: '123456789123123',
     };
 
     const client = await useCase.execute({ ...props });

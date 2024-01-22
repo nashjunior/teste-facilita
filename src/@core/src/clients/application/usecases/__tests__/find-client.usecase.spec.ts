@@ -23,7 +23,7 @@ describe('Find client usecase unit tests', () => {
     const clientProps = {
       name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      phoneNumber: '123456789',
+      phoneNumber: '123456789123123',
     };
     const client = await Client.create(clientProps);
 

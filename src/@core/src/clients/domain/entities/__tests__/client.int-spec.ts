@@ -1,13 +1,12 @@
 import { Entity } from '#seedwork/domain/entities';
 import { IClientProps, Client } from '../client';
-import { EntityValidationError } from '#seedwork/domain/errors';
 
 describe('Integration tests for client entity', () => {
   it('should inherit from entity base class', async () => {
     const clientEntity = await Client.create({
       name: 'Nome do Cliente',
       email: 'email@cliente.com',
-      phoneNumber: '123456789',
+      phoneNumber: '1234567891234',
     });
 
     expect(clientEntity).toBeInstanceOf(Entity);
@@ -22,7 +21,7 @@ describe('Integration tests for client entity', () => {
       const props: IClientProps = {
         name: 'Nome Válido',
         email: 'email@valido.com',
-        phoneNumber: '987654321',
+        phoneNumber: '9876543211234',
       };
 
       const client = await Client.create(props);
