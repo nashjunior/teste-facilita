@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ClientsPostgresRepository,ClientsCoordinatesPostgresRepository } from "#clients/infra/repositories/postgresql";
-import { CreateClientUsecase,UpdateClientCoordinateUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase } from "#clients/application";
+import { CreateClientUsecase,UpdateClientCoordinateUsecase, DeleteClientUsecase, FindClientUsecase, ListClientsUsecase, UpdateClientUsecase, FindCoordinateByClientUsecase } from "#clients/application";
 import { ClientsRepository } from "#clients/domain";
 
 export type IParamsListClients = {
@@ -50,6 +50,17 @@ export class ClientsController {
     const client = await createClientUsecase.execute({uuid: request.params.id})
 
     return response.status(200).send(client)
+  }
+
+  async findCoordinate(request: FastifyRequest<{Params: {id: string}}>, response: FastifyReply) {
+    const clientsCoordinatesPostgresRepository = new ClientsCoordinatesPostgresRepository()
+
+    const useCase = new FindCoordinateByClientUsecase.Usecase(
+      clientsCoordinatesPostgresRepository
+    );
+
+    const clientCoordinate = await useCase.execute({uuid: request.params.id })
+    return response.status(200).send(clientCoordinate)
   }
 
   async create(request: FastifyRequest<{Body: CreateClientUsecase.Input}>, response: FastifyReply) {
