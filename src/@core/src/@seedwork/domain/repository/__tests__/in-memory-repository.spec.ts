@@ -1,9 +1,5 @@
 import { NotFoundError } from '../../../../@seedwork/domain/errors/not-found-error';
-import {
-  Entity,
-  IAuditJSONProps,
-  IAuditProps,
-} from '../../../../@seedwork/domain/entities';
+import { Entity, IAuditJSONProps } from '../../../../@seedwork/domain/entities';
 import { InMemoryRepository } from '../abstract-in-memory.repository';
 import { SearchResult } from '../search-result';
 
@@ -136,6 +132,7 @@ describe('Search result unit tests', () => {
       const searchResult = new SearchResult(props);
       expect(searchResult.toJSON()).toStrictEqual({
         ...props,
+        totalPage: 2,
         lastPage: Math.ceil(props.total / props.perPage),
       });
     });
