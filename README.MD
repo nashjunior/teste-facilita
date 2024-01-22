@@ -10,7 +10,7 @@
 
 ## Relates To
 
-- [Frontend](https://github.com/nashjunior/teste-facilita-frontend/blob/main/README.md)
+- [Frontend](https://github.com/nashjunior/teste-facilita-front)
 
 ## Technologies used:
 
